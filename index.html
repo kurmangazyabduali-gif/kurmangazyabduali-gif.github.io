@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>CREATIVE AIMAQ — Жобасы</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        themeBeige: '#F7E9CE',
+                        themeLightBeige: '#FAF2E2',
+                        themeGold: '#C58F2C',
+                        themeDarkGold: '#B88728',
+                        themeBronze: '#8C6219',
+                        themeBrown: '#4A3515',
+                        themeDark: '#2D1F0B',
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: #F7E9CE;
+            color: #4A3515;
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+            opacity: 0;
+            transform: scale(0.98);
+            filter: blur(4px);
+            transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), filter 1.1s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0px);
+        }
+
+        body.diving {
+            opacity: 0;
+            transform: scale(1.12);
+            filter: blur(14px);
+            transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1), transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), filter 1.4s ease;
+        }
+
+        /* CINEMATIC FULL IMMERSION OVERLAY */
+        #immersionOverlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #FAF2E2 0%, #F7E9CE 60%, #DDB86C 100%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            clip-path: circle(0% at 50% 50%);
+            transition: opacity 0.8s ease, clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        #immersionOverlay.active {
+            opacity: 1;
+            pointer-events: auto;
+            clip-path: circle(150% at 50% 50%);
+        }
+
+        /* Portal Rings Effect */
+        .portal-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .portal-container {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        .portal-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            box-shadow: 0 0 25px rgba(197, 143, 44, 0.6);
+        }
+
+        .ring-1 {
+            inset: 0;
+            border-top-color: #C58F2C;
+            border-right-color: #8C6219;
+            animation: rotateClockwise 2s linear infinite;
+        }
+
+        .ring-2 {
+            inset: 10px;
+            border-bottom-color: #B88728;
+            border-left-color: #FAF2E2;
+            animation: rotateCounter 1.5s linear infinite;
+        }
+
+        .ring-3 {
+            inset: 20px;
+            border-top-color: #8C6219;
+            border-left-color: #C58F2C;
+            animation: rotateClockwise 2.8s linear infinite;
+        }
+
+        .portal-icon {
+            font-size: 28px;
+            color: #8C6219;
+            animation: pulseGlow 1.8s ease-in-out infinite;
+        }
+
+        @keyframes rotateClockwise {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateCounter {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(197, 143, 44, 0.5)); }
+            50% { transform: scale(1.18); filter: drop-shadow(0 0 20px rgba(197, 143, 44, 0.9)); }
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #C58F2C;
+            font-size: 16px;
+            opacity: 0;
+            animation: floatSparkle 2s ease-in-out infinite;
+        }
+
+        .sp-1 { top: -15px; left: 10px; animation-delay: 0s; }
+        .sp-2 { top: 25px; right: -20px; animation-delay: 0.5s; }
+        .sp-3 { bottom: -15px; right: 10px; animation-delay: 1s; }
+        .sp-4 { bottom: 25px; left: -20px; animation-delay: 1.5s; }
+
+        @keyframes floatSparkle {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            50% { opacity: 1; transform: translateY(-8px) scale(1.2); }
+            100% { transform: translateY(-16px) scale(0.5); opacity: 0; }
+        }
+
+        .gold-shimmer {
+            background: linear-gradient(90deg, #8C6219 0%, #C58F2C 50%, #8C6219 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: goldShimmer 2s linear infinite;
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        #immersionOverlay.active .progress-fill {
+            animation: fillProgress 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .section-divider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .section-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 35px;
+        }
+
+        @media (min-width: 640px) {
+            .section-divider svg {
+                height: 50px;
+            }
+        }
+
+        /* PERFECT RESPONSIVE TOUCH-FRIENDLY MAP PINS (1 TO 11) */
+        .map-pin {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            font-size: 11px;
+            font-weight: 800;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.8px solid #FFFFFF;
+            box-shadow: 0 0 8px rgba(4, 120, 87, 0.8), 0 2px 5px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.25s ease;
+            z-index: 25;
+        }
+
+        /* Expanded Touch Hitbox for Mobile Phones */
+        .map-pin::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+        }
+
+        @media (min-width: 640px) {
+            .map-pin {
+                width: 36px;
+                height: 36px;
+                font-size: 15px;
+                border-width: 2.5px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .map-pin {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+                border-width: 3px;
+                box-shadow: 0 0 16px rgba(4, 120, 87, 0.9), 0 4px 10px rgba(0,0,0,0.35);
+            }
+        }
+
+        .map-pin:active, .map-pin:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            background: linear-gradient(135deg, #C58F2C 0%, #8C6219 100%);
+            box-shadow: 0 0 22px rgba(197, 143, 44, 1), 0 6px 14px rgba(0,0,0,0.4);
+            z-index: 35;
+        }
+
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #059669;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        .zone-card {
+            background: rgba(250, 242, 226, 0.9);
+            border: 1px solid rgba(197, 143, 44, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .zone-card:active {
+            transform: scale(0.98);
+            background: #FFFFFF;
+        }
+
+        @media (min-width: 640px) {
+            .zone-card:hover {
+                background: #FFFFFF;
+                border-color: #C58F2C;
+                transform: translateY(-4px);
+                box-shadow: 0 12px 28px rgba(140, 98, 25, 0.2);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- CINEMATIC FULL IMMERSION OVERLAY -->
+    <div id="immersionOverlay">
+        <div class="portal-container">
+            <div class="portal-ring ring-1"></div>
+            <div class="portal-ring ring-2"></div>
+            <div class="portal-ring ring-3"></div>
+            <i class="fa-solid fa-landmark portal-icon"></i>
+
+            <span class="sparkle sp-1">✦</span>
+            <span class="sparkle sp-2">✧</span>
+            <span class="sparkle sp-3">✦</span>
+            <span class="sparkle sp-4">✧</span>
+        </div>
+
+        <p id="immersionText" class="font-cinzel text-base sm:text-xl font-black mt-6 sm:mt-8 tracking-[0.15em] sm:tracking-[0.2em] gold-shimmer text-center px-4">
+            АЙМАҚҚА ПОЛНОЕ ПОГРУЖЕНИЕ...
+        </p>
+
+        <!-- Golden Progress Bar -->
+        <div class="w-48 sm:w-56 h-1.5 bg-[#C58F2C]/20 rounded-full mt-5 sm:mt-6 overflow-hidden border border-[#C58F2C]/30 shadow-inner">
+            <div class="progress-fill h-full bg-gradient-to-r from-[#8C6219] via-[#C58F2C] to-[#FAF2E2]"></div>
+        </div>
+    </div>
+
+    <!-- Header Navigation (Optimized for Mobile) -->
+    <header class="sticky top-0 z-50 bg-[#F7E9CE]/95 backdrop-blur-md border-b border-[#C58F2C]/30 py-2.5 px-3 sm:px-8 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#C58F2C] flex items-center justify-center bg-[#C58F2C]/10 text-[#8C6219] flex-shrink-0">
+                    <i class="fa-solid fa-landmark text-xs sm:text-base"></i>
+                </div>
+                <div>
+                    <h1 class="font-cinzel text-sm sm:text-lg tracking-wider font-bold text-[#8C6219] leading-tight">«CREATIVE AIMAQ»</h1>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8 text-sm font-semibold text-[#4A3515]">
+                <a href="#hero-section" class="hover:text-[#C58F2C] transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-image text-xs"></i> Басты фото
+                </a>
+                <a href="#plan-section" class="hover:text-[#C58F2C] transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-xs"></i> Көрме картасы
+                </a>
+                <a href="#zones-section" class="hover:text-[#C58F2C] transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-list-ol text-xs"></i> Залдар тізімі
+                </a>
+            </nav>
+
+            <a href="#plan-section" class="bg-gradient-to-r from-[#C58F2C] to-[#8C6219] hover:from-[#b07d20] hover:to-[#785312] text-white font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-sm transition-all duration-300 shadow-md flex-shrink-0">
+                Картаны қарау
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="w-full flex-grow space-y-0">
+
+        <!-- SECTION 1: HERO IMAGE (Fully responsive, no clipping) -->
+        <section id="hero-section" class="w-full relative bg-[#F7E9CE] pt-1.5 sm:pt-4">
+            <div class="w-full max-w-[1500px] mx-auto relative px-1 sm:px-4">
+                <img id="heroImage" src="images/hero.jpg" alt="Creative Aimaq Hero Image" 
+                     class="w-full h-auto object-contain mx-auto rounded-md sm:rounded-lg shadow-md border border-[#C58F2C]/20 block">
+            </div>
+        </section>
+
+        <!-- Smooth Transition Wave 1 -->
+        <div class="section-divider">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="fill-[#FAF2E2]">
+                <path d="M0,0 C150,90 350,-40 500,60 C650,160 900,10 1200,40 L1200,120 L0,120 Z"></path>
+            </svg>
+        </div>
+
+        <!-- SECTION 2: FLOOR PLAN IMAGE WITH 100% VISIBILITY (No truncation) -->
+        <section id="plan-section" class="w-full relative bg-[#FAF2E2] py-4 sm:py-10 px-1.5 sm:px-6">
+            <div class="max-w-6xl mx-auto space-y-3 sm:space-y-4">
+                <div class="text-center space-y-1 px-2">
+                    <span class="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-semibold tracking-widest text-[#8C6219] uppercase bg-[#C58F2C]/10 rounded-full border border-[#C58F2C]/30">
+                        Интерактивті карта
+                    </span>
+                    <h2 class="text-xl sm:text-3xl font-bold font-cinzel text-[#8C6219]">Көрме Павильонының Картасы</h2>
+                    <p class="text-[11px] sm:text-sm text-[#4A3515]/75">Аймақты таңдау үшін картадағы жасыл нөмірленген 1–11 батырмаларды басыңыз</p>
+                </div>
+
+                <!-- Interactive Map Container - FULL VISIBILITY NO TRUNCATION -->
+                <div class="w-full max-w-[1250px] mx-auto relative rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl border border-[#C58F2C]/40 bg-[#F7E9CE] p-0.5 sm:p-2">
+                    <img id="planImage" src="images/plan.jpg" alt="Creative Aimaq Exhibition Floor Plan" 
+                         class="w-full h-auto object-contain block mx-auto rounded-md">
+
+                    <!-- ALL 11 CLICKABLE HOTSPOT BUTTONS PERFECTLY POSITIONED -->
+                    <button onclick="navigateToZone(1)" class="map-pin" style="left: 50.0%; top: 73.5%;" title="№1 Сыртқы кіреберіс арка">1</button>
+                    <button onclick="navigateToZone(2)" class="map-pin" style="left: 53.2%; top: 59.9%;" title="№2 Ішкі кіреберіс">2</button>
+                    <button onclick="navigateToZone(3)" class="map-pin" style="left: 65.2%; top: 56.3%;" title="№3 Қазақ анимация залы">3</button>
+                    <button onclick="navigateToZone(4)" class="map-pin" style="left: 77.7%; top: 56.3%;" title="№4 Ұлттық зергерлік бұйымдар залы">4</button>
+                    <button onclick="navigateToZone(5)" class="map-pin" style="left: 83.0%; top: 36.7%;" title="№5 Ағаш бұйымдары шеберханасы">5</button>
+                    <button onclick="navigateToZone(6)" class="map-pin" style="left: 73.2%; top: 26.5%;" title="№6 AI және цифрлық даму залы">6</button>
+                    <button onclick="navigateToZone(7)" class="map-pin" style="left: 49.5%; top: 25.5%;" title="№7 Сахна, ашық алаң">7</button>
+                    <button onclick="navigateToZone(8)" class="map-pin" style="left: 26.5%; top: 27.5%;" title="№8 Дәстүрлі кілемдер залы">8</button>
+                    <button onclick="navigateToZone(9)" class="map-pin" style="left: 35.8%; top: 47.9%;" title="№9 Ұлттық иллюстрация және арт аймақ">9</button>
+                    <button onclick="navigateToZone(10)" class="map-pin" style="left: 19.8%; top: 55.5%;" title="№10 Ұлттық киімдер залы">10</button>
+                    <button onclick="navigateToZone(11)" class="map-pin" style="left: 32.5%; top: 60.5%;" title="№11 Қызылорда Talks-қа арнайы алаң">11</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Smooth Transition Wave 2 -->
+        <div class="section-divider rotate-180">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="fill-[#FAF2E2]">
+                <path d="M0,0 C150,90 350,-40 500,60 C650,160 900,10 1200,40 L1200,120 L0,120 Z"></path>
+            </svg>
+        </div>
+
+        <!-- SECTION 3: INTERACTIVE ZONES & DIRECTORY -->
+        <section id="zones-section" class="w-full bg-[#F7E9CE] py-8 sm:py-10 px-3 sm:px-8 border-t border-[#C58F2C]/30">
+            <div class="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[#C58F2C]/30 pb-3 sm:pb-4">
+                    <div>
+                        <h2 class="text-lg sm:text-2xl font-bold font-cinzel text-[#8C6219]">Павильон Залдары мен Аймақтары</h2>
+                        <p class="text-[11px] sm:text-sm text-[#4A3515]/70 font-medium">Керекті залды таңдап, оның материалдар бетіне өтіңіз</p>
+                    </div>
+                    <!-- Live Search Input -->
+                    <div class="relative w-full sm:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#8C6219] text-xs"></i>
+                        <input type="text" id="searchInput" placeholder="Залды іздеу..." 
+                               class="w-full pl-8 pr-4 py-2 bg-[#FAF2E2] border border-[#C58F2C]/50 rounded-lg text-xs text-[#4A3515] placeholder-[#4A3515]/50 focus:outline-none focus:border-[#8C6219] transition-colors shadow-inner">
+                    </div>
+                </div>
+
+                <!-- Zones Grid -->
+                <div id="zonesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                    
+                    <div onclick="navigateToZone(1)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Сыртқы кіреберіс арка">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">1</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№1 Сыртқы кіреберіс арка</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">QYZYLORDA Creative City Weekend бас кіреберісі</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(2)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Ішкі кіреберіс">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">2</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№2 Ішкі кіреберіс</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Қобыз макеті мен кәсіпорындар тулары</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(3)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Қазақ анимация залы">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">3</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№3 Қазақ анимация залы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">«Тамырдан туындыға» мультимедиа ролигі</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(4)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Ұлттық зергерлік бұйымдар залы">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">4</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№4 Зергерлік бұйымдар залы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Б.Жақыпов зергерлік шеберханасы мен көрмесі</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(5)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Ағаш бұйымдары шеберханасы">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">5</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№5 Ағаш бұйымдары шеберханасы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Ұлттық аспаптар көрмесі мен қолөнер шеберлері</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(6)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="AI және цифрлық даму залы">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">6</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№6 AI және цифрлық даму залы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">10 ЛЭД панель, Робот және Qyzylorda Hub</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(8)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Дәстүрлі кілемдер залы">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">8</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№8 Дәстүрлі кілемдер залы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Түкті кілем, алаша, басқұр және тұмар тоқу</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(9)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Ұлттық иллюстрация және арт аймақ">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">9</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№9 Ұлттық иллюстрация & Арт</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">2 Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Галерея, текстиль және шыныға сурет салу</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(10)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Ұлттық киімдер залы">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">10</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№10 Ұлттық киімдер залы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Сән дефилесі, «Сыр style collection» және «Қайсар» формасы</p>
+                        </div>
+                    </div>
+
+                    <div onclick="navigateToZone(11)" class="zone-card p-3.5 sm:p-4 rounded-xl flex items-start space-x-3 cursor-pointer" data-title="Қызылорда Talks-қа арнайы алаң">
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#059669] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-sm text-xs sm:text-sm">11</div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#4A3515] text-xs sm:text-sm">№11 Қызылорда Talks алаңы</h3>
+                                <span class="text-[9px] sm:text-[10px] bg-[#059669]/15 text-[#059669] px-1.5 py-0.5 rounded font-bold">Фото бар</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-[#4A3515]/70 mt-0.5">Танымал тұлғалармен сұхбат және ашық диалог студиясы</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#2D1F0B] text-[#F7E9CE] py-6 sm:py-8 px-4 text-center text-xs">
+        <div class="max-w-6xl mx-auto space-y-2">
+            <p class="font-cinzel text-[#C58F2C] font-bold text-sm">«CREATIVE AIMAQ» ЖОБАСЫ</p>
+            <p class="text-[#F7E9CE]/50 pt-2 border-t border-[#C58F2C]/20">&copy; 2026 Барлық құқықтар қорғалған.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+        });
+
+        function navigateToZone(zoneId) {
+            const overlay = document.getElementById('immersionOverlay');
+            const overlayText = document.getElementById('immersionText');
+            overlayText.innerText = `№${zoneId} АЙМАҚҚА ПОЛНОЕ ПОГРУЖЕНИЕ...`;
+            
+            overlay.classList.add('active');
+            document.body.classList.add('diving');
+
+            setTimeout(() => {
+                window.location.href = `zone.html?id=${zoneId}`;
+            }, 1500);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.zone-card');
+
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                if (title.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

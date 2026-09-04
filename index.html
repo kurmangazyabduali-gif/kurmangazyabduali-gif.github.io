@@ -212,7 +212,7 @@
             }
         }
 
-        /* PERFECT RESPONSIVE TOUCH-FRIENDLY MAP PINS (1 TO 11) */
+        /* PERFECT ACCURATE RESPONSIVE MAP PINS (1 TO 11) */
         .map-pin {
             position: absolute;
             transform: translate(-50%, -50%);
@@ -233,7 +233,6 @@
             z-index: 25;
         }
 
-        /* Expanded Touch Hitbox for Mobile Phones */
         .map-pin::before {
             content: '';
             position: absolute;
@@ -329,7 +328,7 @@
         </div>
     </div>
 
-    <!-- Header Navigation (Optimized for Mobile) -->
+    <!-- Header Navigation -->
     <header class="sticky top-0 z-50 bg-[#F7E9CE]/95 backdrop-blur-md border-b border-[#C58F2C]/30 py-2.5 px-3 sm:px-8 shadow-sm">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2.5">
@@ -362,7 +361,7 @@
     <!-- MAIN CONTENT -->
     <main class="w-full flex-grow space-y-0">
 
-        <!-- SECTION 1: HERO IMAGE (Fully responsive, no clipping) -->
+        <!-- SECTION 1: HERO IMAGE -->
         <section id="hero-section" class="w-full relative bg-[#F7E9CE] pt-1.5 sm:pt-4">
             <div class="w-full max-w-[1500px] mx-auto relative px-1 sm:px-4">
                 <img id="heroImage" src="images/hero.jpg" alt="Creative Aimaq Hero Image" 
@@ -377,7 +376,7 @@
             </svg>
         </div>
 
-        <!-- SECTION 2: FLOOR PLAN IMAGE WITH 100% VISIBILITY (No truncation) -->
+        <!-- SECTION 2: FLOOR PLAN IMAGE WITH 100% VISIBILITY & EXACTLY ALIGNED PINS -->
         <section id="plan-section" class="w-full relative bg-[#FAF2E2] py-4 sm:py-10 px-1.5 sm:px-6">
             <div class="max-w-6xl mx-auto space-y-3 sm:space-y-4">
                 <div class="text-center space-y-1 px-2">
@@ -394,15 +393,15 @@
                          class="w-full h-auto object-contain block mx-auto rounded-md">
 
                     <!-- ALL 11 CLICKABLE HOTSPOT BUTTONS PERFECTLY POSITIONED -->
-                    <button onclick="navigateToZone(1)" class="map-pin" style="left: 50.0%; top: 73.5%;" title="№1 Сыртқы кіреберіс арка">1</button>
-                    <button onclick="navigateToZone(2)" class="map-pin" style="left: 53.2%; top: 59.9%;" title="№2 Ішкі кіреберіс">2</button>
-                    <button onclick="navigateToZone(3)" class="map-pin" style="left: 65.2%; top: 56.3%;" title="№3 Қазақ анимация залы">3</button>
-                    <button onclick="navigateToZone(4)" class="map-pin" style="left: 77.7%; top: 56.3%;" title="№4 Ұлттық зергерлік бұйымдар залы">4</button>
+                    <button onclick="navigateToZone(1)" class="map-pin" style="left: 50.0%; top: 73.8%;" title="№1 Сыртқы кіреберіс арка">1</button>
+                    <button onclick="navigateToZone(2)" class="map-pin" style="left: 53.5%; top: 59.9%;" title="№2 Ішкі кіреберіс">2</button>
+                    <button onclick="navigateToZone(3)" class="map-pin" style="left: 65.6%; top: 56.3%;" title="№3 Қазақ анимация залы">3</button>
+                    <button onclick="navigateToZone(4)" class="map-pin" style="left: 77.5%; top: 56.3%;" title="№4 Ұлттық зергерлік бұйымдар залы">4</button>
                     <button onclick="navigateToZone(5)" class="map-pin" style="left: 83.0%; top: 36.7%;" title="№5 Ағаш бұйымдары шеберханасы">5</button>
-                    <button onclick="navigateToZone(6)" class="map-pin" style="left: 73.2%; top: 26.5%;" title="№6 AI және цифрлық даму залы">6</button>
-                    <button onclick="navigateToZone(7)" class="map-pin" style="left: 49.5%; top: 25.5%;" title="№7 Сахна, ашық алаң">7</button>
+                    <button onclick="navigateToZone(6)" class="map-pin" style="left: 72.8%; top: 26.5%;" title="№6 AI және цифрлық даму залы">6</button>
+                    <button onclick="navigateToZone(7)" class="map-pin" style="left: 49.4%; top: 25.6%;" title="№7 Сахна, ашық алаң">7</button>
                     <button onclick="navigateToZone(8)" class="map-pin" style="left: 26.5%; top: 27.5%;" title="№8 Дәстүрлі кілемдер залы">8</button>
-                    <button onclick="navigateToZone(9)" class="map-pin" style="left: 35.8%; top: 47.9%;" title="№9 Ұлттық иллюстрация және арт аймақ">9</button>
+                    <button onclick="navigateToZone(9)" class="map-pin" style="left: 35.6%; top: 47.9%;" title="№9 Ұлттық иллюстрация және арт аймақ">9</button>
                     <button onclick="navigateToZone(10)" class="map-pin" style="left: 19.8%; top: 55.5%;" title="№10 Ұлттық киімдер залы">10</button>
                     <button onclick="navigateToZone(11)" class="map-pin" style="left: 32.5%; top: 60.5%;" title="№11 Қызылорда Talks-қа арнайы алаң">11</button>
                 </div>
